@@ -9,4 +9,12 @@ const index = require('../controllers/index');
 
 router.get('/', index.index);
 
+router.get('/reg', index.reg);
+
+router.get('/checkUser', index.checkUser);
+
+router.get('/checkEmail', index.checkEmail);
+
+router.post('/doReg', index.doReg);
+
 module.exports = router;

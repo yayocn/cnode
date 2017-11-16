@@ -1,0 +1,217 @@
+<!-- 引入公共的头部 -->
+<% include layout/header %>
+
+<style>
+    .error{
+        color : red;
+    }
+
+    .success {
+        color:green;
+    }
+</style>
+
+<div id='main'>
+    <div id='sidebar'>
+        <div class='panel'>
+            <div class='header'>
+                <span class='col_fade'>关于</span>
+            </div>
+            <div class='inner'>
+                <p>CNode：Node.js专业中文社区</p>
+
+                <p>在这里你可以：</p>
+                <ul>
+                    <li>向别人提出你遇到的问题</li>
+                    <li>帮助遇到问题的人</li>
+                    <li>分享自己的知识</li>
+                    <li>和其它人一起进步</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id='content'>
+        <div class='panel'>
+            <div class='header'>
+                <ul class='breadcrumb'>
+                    <li><a href='/'>主页</a><span class='divider'>/</span></li>
+                    <li class='active'>注册</li>
+                </ul>
+            </div>
+            <div class='inner'>
+
+                <form id='signin_form' class='form-horizontal' action='/doReg' method='post'>
+                    <div class='control-group'>
+                        <label class='control-label' for='name'>用户名</label>
+
+                        <div class='controls'>
+                            <input class='input-xlarge' id='name' required name='username' size='30' type='text'/>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class='control-group'>
+                        <label class='control-label' for='pass'>密码</label>
+
+                        <div class='controls'>
+                            <input class='input-xlarge' id='pass' required name='userpwd' size='30' type='password'/>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <div class='control-group'>
+                        <label class='control-label' for='pass2'>确认密码</label>
+
+                        <div class='controls'>
+                            <input class='input-xlarge' id='pass2' required name='userpwd2' size='30' type='password'/>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <div class='control-group'>
+                        <label class='control-label' for='email'>邮箱</label>
+
+                        <div class='controls'>
+                            <input class='input-xlarge' id='email' required name='email' size='30' type='email'/>
+                            <span></span>
+                        </div>
+                    </div>
+
+
+                    <div class='form-actions'>
+                        <input type='submit' class='span-primary' value='注册'/>
+
+                        <a id="forgot_password" href='/login'>已有账户，请登录</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+  // 定义验证是否通过的标志
+  var isUserOk = false;
+  var isPwdOk = false;
+  var isEmailOk = false;
+
+  // 检测用户名是否可用
+  $('input[name=username]').blur(function(){
+    // 去空格处理
+    var username = this.value.trim();
+
+    // 判断用户名是否为空
+    if(username==''){
+      // 给用户提示，不允许为空
+      $(this).next().html('用户名不允许为空');
+      $(this).next().attr('class','error');
+
+      // 终止程序
+      return;
+    }
+
+    // 存储当前上下文环境
+    userObj = $(this);
+
+    // 以此结果为条件查询数据库,发送给服务器 ajax
+    $.get('/checkUser',{username:username},function(msg){
+      console.log(msg);
+      if(msg=='ok'){
+        // 可用
+        userObj.next().html('用户名可用');
+        userObj.next().attr('class','success');
+
+        // 设置标记为true
+        isUserOk = true;
+      }else{
+        userObj.next().html('用户名已被占用');
+        userObj.next().attr('class','error');
+      }
+    })
+  });
+
+  // 检测密码是否为空
+  $('input[name=userpwd]').blur(function(){
+    if(this.value.trim()==''){
+      $(this).next().html('密码不允许为空');
+      $(this).next().attr('class','error');
+    }else{
+      // 对应的准备检测密码长度、强度
+      $(this).next().html('密码可用');
+      $(this).next().attr('class','success');
+    }
+  });
+
+  // 检测两次密码是否一致
+  $('input[name=userpwd2]').blur(function(){
+    // 当前值 $(this).val();
+    // 密码框的值 $('input[name=userpwd]').val()
+
+    // 先要检测本身是否为空
+    if($(this).val().trim()==''){
+      $(this).next().html('确认密码不允许为空');
+      $(this).next().attr('class','error');
+
+      // 终止程序
+      return;
+    }
+    // 比较
+    if($(this).val().trim()==$('input[name=userpwd]').val().trim()){
+      // 说明一致
+      $(this).next().html('两次密码一致');
+      $(this).next().attr('class','success');
+
+      // 设置密码通过验证
+      isPwdOk = true;
+    }else{
+      $(this).next().html('两次密码不一致');
+      $(this).next().attr('class','error');
+    }
+  });
+
+  // 检测邮箱是否可用
+  $('input[name=email]').blur(function(){
+    // 检测是否为空
+    var email= $(this).val().trim();
+    if(email==''){
+      $(this).next().html('邮箱不允许为空');
+      $(this).next().attr('class','error');
+    }else{
+      // 存储当前对象
+      var emailObj = $(this);
+
+      // 发送ajax验证
+      $.get('/checkEmail',{email:email},function(msg){
+        // ok 表示可用，used 说明已经被其他用户占用了
+        console.log(msg);
+
+        if(msg=='ok'){
+          // 可用
+          emailObj.next().html('邮箱可用');
+          emailObj.next().attr('class','success');
+
+          // 邮箱验证通过
+          isEmailOk = true;
+        }else{
+          emailObj.next().html('邮箱已被其他用户占用了!');
+          emailObj.next().attr('class','error');
+        }
+      })
+    }
+  })
+
+  // 表单提交时，必须要判定用户名、密码、邮箱是否都已经验证通过了
+  $('#signin_form').submit(function(){
+    // 判定是否要提交
+    if(isUserOk&&isEmailOk&&isPwdOk){
+      return true;
+    }else{
+      // 阻止表单提交
+      return false;
+    }
+  })
+</script>
+
+<!-- 引入公共的底部 -->
+<% include layout/footer %>
