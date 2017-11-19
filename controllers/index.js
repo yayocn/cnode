@@ -35,7 +35,23 @@ const index = {
     })
   },
   doReg (req, res) {
+    /*
+       先验证数据安全性， CSRF 验证， 判断来源可信等
+     */
 
+    const data = {
+      username: req.body.username,
+      userpwd: req.body.pwd,
+      email: req.body.email,
+    };
+
+    userModel.create(data, (err, msg) => {
+      if (err) {
+
+      }
+      console.log(err)
+      console.log(msg)
+    })
   }
 };
 
