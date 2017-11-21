@@ -27,11 +27,20 @@ app.use(session({
   secret: 'asdfasdfasdf',
   rolling: true,
   resave: true,
-  cookir: {
+  cookie: {
     path: '/',
     maxAge: 1000 * 60 * 30
   }
 }))
+
+
+// 将session相关信息存储到本地对象
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
+
+  // 移交权限
+  next();
+})
 
 app.use('/', index);
 app.use('/users', users);
