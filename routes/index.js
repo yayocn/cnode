@@ -17,4 +17,8 @@ router.get('/checkEmail', index.checkEmail);
 
 router.post('/doReg', index.doReg);
 
+router.get('/tipEmail', index.tipEmail);
+
+router.get('/verifyEmail', index.verifyEmail);
+
 module.exports = router;
