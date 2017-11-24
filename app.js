@@ -44,8 +44,15 @@ app.use(flash());
 // 将session相关信息存储到本地对象
 app.use((req, res, next) => {
   res.locals.user = req.session.user;
+
   // 存储错误信息
   res.locals.errMsg = req.flash('errMsg');
+
+  // 密码错误信息
+  res.locals.pwdErrorMsg = req.flash('pwdErrorMsg');
+
+  // 密码修改成功
+  res.locals.setPwdOk = req.flash('setPwdOk');
   // 移交权限
   next();
 })

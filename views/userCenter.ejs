@@ -162,7 +162,8 @@
                 <form id='change_pass_form' class='form-horizontal' action='/user/setPwd' method='post'>
 
                     <!-- 错误信息标记 -->
-
+                    <p style="color:red"><%= pwdErrorMsg %></p>
+                    <p style="color:green"><%= setPwdOk %></p>
 
                     <div class='control-group'>
                         <label class='control-label' for='old_pass'>当前密码</label>

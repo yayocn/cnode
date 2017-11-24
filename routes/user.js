@@ -10,4 +10,6 @@ router.get('/userInfo', checkUserLogin, user.userInfo);
 
 router.post('/setInfo', checkUserLogin, user.setInfo);
 
+router.post('/setPwd', checkUserLogin, user.setPwd);
+
 module.exports = router;
