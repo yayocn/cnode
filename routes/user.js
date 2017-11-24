@@ -12,4 +12,6 @@ router.post('/setInfo', checkUserLogin, user.setInfo);
 
 router.post('/setPwd', checkUserLogin, user.setPwd);
 
+router.post('/setUserpic', checkUserLogin, user.setUserpic);
+
 module.exports = router;
