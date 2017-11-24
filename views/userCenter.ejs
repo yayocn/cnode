@@ -1,0 +1,209 @@
+<% include layouts/header.ejs %>
+
+<div id='main'>
+    <div id='sidebar'>
+
+        <% include userInfo %>
+
+        <div class='panel'>
+            <div class='inner ads'>
+
+                <a href="http://www.ucloud.cn/site/active/gift.html?utm_source=cnodejs&utm_medium=content_pic_pc&utm_campaign=multicloud&utm_content=gift&ytag=cnodejs" target="_blank" class="banner sponsor_outlink"
+                   data-label="ucloud-banner">
+                    <img src="//dn-cnode.qbox.me/FgQS-GQDfqwAD_v0NuhyYUOUk5MG">
+                </a>
+
+
+                <div class="sep10"></div>
+
+                <a href="https://alinode.aliyun.com/?ref=cnode" target="_blank" class="banner sponsor_outlink"
+                   data-label="alinode">
+                    <img src="//dn-cnode.qbox.me/Fn4D6BhOTz1IswvmzeZ1q7QW1ls_">
+                </a>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <div class='panel'>
+            <div class='header'>
+                <span class='col_fade'>友情社区</span>
+            </div>
+            <div class='inner'>
+                <ol class="friendship-community">
+                    <li>
+                        <a href="https://ruby-china.org/" target="_blank">
+                            <img src="//o4j806krb.qnssl.com/public/images/ruby-china-20150529.png">
+                        </a>
+                    </li>
+                    <div class="sep10"></div>
+                    <li>
+                        <a href="http://golangtc.com/" target="_blank">
+                            <img src="//o4j806krb.qnssl.com/public/images/golangtc-logo.png">
+                        </a>
+                    </li>
+                    <div class="sep10"></div>
+                    <li>
+                        <a href="http://phphub.org/" target="_blank">
+                            <img src="//o4j806krb.qnssl.com/public/images/phphub-logo.png">
+                        </a>
+                    </li>
+                    <div class="sep10"></div>
+                    <li>
+                        <a href="https://testerhome.com/" target="_blank">
+                            <img src="//dn-cnode.qbox.me/FjLUc7IJ2--DqS706etPQ1EGajxK">
+                        </a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div class='panel'>
+            <div class='header'>
+                <span class='col_fade'>客户端二维码</span>
+            </div>
+            <div class='inner cnode-app-download'>
+                <img width='200' src="//dn-cnode.qbox.me/FtG0YVgQ6iginiLpf9W4_ShjiLfU">
+                <br />
+                <a href="https://github.com/soliury/noder-react-native" target="_blank">客户端源码地址</a>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id='content'>
+        <div class='panel'>
+            <div class='header'>
+                <ul class='breadcrumb'>
+                    <li><a href='/'>主页</a><span class='divider'>/</span></li>
+                    <li class='active'>设置</li>
+                </ul>
+            </div>
+            <div class='inner'>
+
+
+                <form id='setting_form' class='form-horizontal' action='/user/setInfo' method='post'>
+                    <div class='control-group'>
+                        <label class='control-label' for='name'>用户名</label>
+
+                        <!--
+                                readonly 	只读,表单提交时会携带该数据
+                                disabled 	禁止，表单提交不会携带该数据
+
+                        -->
+
+                        <div class='controls'>
+                            <input class='input-xlarge disabled' id='name' name='name' size='30' type='text' disabled value="<%= user.username %>"/>
+                        </div>
+                    </div>
+                    <div class='control-group'>
+                        <label class='control-label' for='email'>电子邮件</label>
+
+                        <div class='controls'>
+                            <input class='input-xlarge readonly' id='email' name='email' size='30' type='text' disabled value="<%= user.email %>"/>
+                        </div>
+                    </div>
+                    <div class='control-group'>
+                        <label class='control-label' for='signature'>个性签名</label>
+
+                        <div class='controls'>
+                            <textarea class='input-xlarge' id='signature' name='mark' size='30'><%= user.mark?user.mark:'这个家伙很懒，什么都没有留下！' %></textarea>
+                        </div>
+                    </div>
+
+                    <div class='form-actions'>
+                        <input type='submit' class='span-primary submit_btn' data-loading-text="保存中.." value='保存设置'/>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class='panel'>
+            <div class='header'>
+                <span class='col_fade'>更改头像</span>
+            </div>
+            <div class='inner'>
+                <form id='change_pass_form' class='form-horizontal' action='/user/setUserpic' method='post' enctype="multipart/form-data">
+
+
+
+                    <div class='control-group'>
+                        <label class='control-label' for='old_pass'>当前头像</label>
+
+                        <div class='controls'>
+                            <img src="/<%= user.userpic %>" alt="">
+                        </div>
+                    </div>
+                    <div class='control-group'>
+                        <label class='control-label' for='new_pass'>新头像</label>
+
+                        <div class='controls'>
+                            <input class='input-xlarge' type='file'  name='userpic' size='30'/>
+                        </div>
+                    </div>
+
+                    <div class='form-actions'>
+                        <input type='submit' class='span-primary submit_btn' data-loading-text="更改中.." value='更新头像'/>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class='panel'>
+            <div class='header'>
+                <span class='col_fade'>更改密码</span>
+            </div>
+            <div class='inner'>
+                <form id='change_pass_form' class='form-horizontal' action='/user/setPwd' method='post'>
+
+                    <!-- 错误信息标记 -->
+
+
+                    <div class='control-group'>
+                        <label class='control-label' for='old_pass'>当前密码</label>
+
+                        <div class='controls'>
+                            <input class='input-xlarge' type='password' id='old_pass' name='userpwd' size='30'/>
+                        </div>
+                    </div>
+                    <div class='control-group'>
+                        <label class='control-label' for='new_pass'>新密码</label>
+
+                        <div class='controls'>
+                            <input class='input-xlarge' type='password' id='new_pass' name='newuserpwd' size='30'/>
+                        </div>
+                    </div>
+
+                    <div class='form-actions'>
+                        <input type='submit' class='span-primary submit_btn' data-loading-text="更改中.." value='更改密码'/>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class='panel'>
+            <div class='header'>
+                <span class='col_fade'>Access Token</span>
+            </div>
+            <div class='inner'>
+                <div>
+                    <span>字符串：</span>
+                    90c6a23c-0423-497f-b461-75eb7d8b5449
+                </div>
+                <div>
+                    <span>二维码：</span>
+                    <span id="access-token-qrcode"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<% include layouts/footer.ejs %>
