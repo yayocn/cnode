@@ -21,4 +21,10 @@ router.get('/tipEmail', index.tipEmail);
 
 router.get('/verifyEmail', index.verifyEmail);
 
+router.get('/login', index.login);
+
+router.post('/doLogin', index.doLogin);
+
+router.get('/logout', index.logout)
+
 module.exports = router;

@@ -82,6 +82,32 @@ const index = {
         })
       }
     })
+  },
+  login (req, res) {
+    res.render('login');
+  },
+  doLogin (req, res) {
+    const con = {
+      username: req.body.username,
+      userpwd: cryptoStr(req.body.userpwd.trim())
+    }
+
+    userModel.findOne(con, (err, data) => {
+      if (data) {
+        // 没有问题
+        req.session.user = data;
+        res.redirect('/');
+      } else {
+
+        req.flash('errMsg', '账户或者密码错误！');
+        res.redirect('back')
+      }
+    })
+  },
+  logout (req, res) {
+    // 销毁session
+    delete req.session.user;
+    res.redirect('/');
   }
 };
 

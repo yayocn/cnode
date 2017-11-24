@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const session = require('express-session');
+const flash = require('connect-flash')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -22,6 +23,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// 定义session中间件
 app.use(session({
   // 加密字符串
   secret: 'asdfasdfasdf',
@@ -33,11 +36,15 @@ app.use(session({
   }
 }))
 
+// 定义传递一次性消息的中间件
+app.use(flash());
+
 
 // 将session相关信息存储到本地对象
 app.use((req, res, next) => {
   res.locals.user = req.session.user;
-
+  // 存储错误信息
+  res.locals.errMsg = req.flash('errMsg');
   // 移交权限
   next();
 })
