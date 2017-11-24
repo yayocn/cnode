@@ -2,27 +2,8 @@
 <div id='main'>
     <div id='sidebar'>
 
-        <div class='panel'>
-
-            <div class='inner'>
-                <p>CNode：Node.js专业中文社区</p>
-
-                <div>
-                    您可以
-                    <a href='/signin'>登录</a>
-                    或
-                    <a href='/signup'>注册</a>
-                    , 也可以
-                    <a href="/auth/github">
-          <span class="span-info">
-            通过 GitHub 登录
-          </span>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-
+        <!-- 引入个人信息模板 -->
+        <% include userInfo.ejs %>
 
         <div class='panel'>
             <div class='inner ads'>
@@ -187,7 +168,7 @@
         </div>
 
     </div>
-    
+
     <div id="content">
         <div class="panel">
             <div class="header">

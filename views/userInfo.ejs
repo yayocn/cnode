@@ -1,0 +1,99 @@
+<% if(user){
+    console.log(user);
+%>
+<!-- 以下是已经登录的信息 -->
+<div class='panel'>
+
+    <div class='header'>
+        <span class='col_fade'>个人信息</span>
+    </div>
+    <div class='inner'>
+        <div class='user_card'>
+            <div>
+                <a class='user_avatar' href="/user/xdlnode">
+                    <img src="/<%= user.userpic %>" title="xdlnode"/>
+                </a>
+                <span class='user_name'><a class='dark' href="/user/xdlnode"><%= user.username %></a></span>
+
+                <div class='board clearfix'>
+                    <div class='floor'>
+                        <span class='big'>积分: <%= user.score %> </span>
+                    </div>
+                </div>
+                <div class="space clearfix"></div>
+                <span class="signature">
+        “
+                    <%= user.mark?user.mark:'这个家伙很懒，什么都没有留下！' %>
+
+
+                    ”
+    </span>
+            </div>
+        </div>
+
+
+        <script>
+          $(document).ready(function () {
+            $('.follow_btn').click(function () {
+              var $me = $(this);
+              var action = $me.attr('action');
+              var params = {
+                follow_id: '585b81a6347bab4d645b337a',
+                _csrf: 'y5wnwh3V-xTRJyMdwEN1aOYSKQS0C-dmiv18'
+              };
+              $.post('/user/' + action, params, function (data) {
+                if (data.status === 'success') {
+                  var $btns = $('.follow_btn');
+                  if (action === 'follow') {
+                    $btns.html('取消关注');
+                    $btns.attr('action', 'un_follow');
+                  } else {
+                    $btns.html('加入关注');
+                    $btns.attr('action', 'follow');
+                  }
+                  $btns.toggleClass('btn-success');
+                }
+              }, 'json');
+            });
+          });
+        </script>
+
+
+    </div>
+
+</div>
+
+
+<div class="panel">
+    <div class='inner'>
+        <a href='/topic/create' id='create_topic_btn'>
+            <span class='span-success'>发布话题</span>
+        </a>
+    </div>
+</div>
+<%}else{ %>
+
+<!-- 未登录信息 -->
+<div class='panel'>
+
+    <div class='inner'>
+        <p>CNode：Node.js专业中文社区</p>
+
+        <div>
+            您可以
+            <a href='/signin'>登录</a>
+            或
+            <a href='/signup'>注册</a>
+            , 也可以
+            <a href="/auth/github">
+          <span class="span-info">
+            通过 GitHub 登录
+          </span>
+            </a>
+        </div>
+    </div>
+
+</div>
+<%} %>
+
+

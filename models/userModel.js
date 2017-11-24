@@ -32,6 +32,11 @@ const userSchema = mongoose.Schema({
   mark: {
     type: String,
     default: ''
+  },
+  // 积分
+  score: {
+    type: Number,
+    default: 0
   }
 });
 
