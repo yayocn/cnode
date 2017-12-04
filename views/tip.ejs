@@ -1,0 +1,99 @@
+<% include layouts/header %>
+
+<div id='main'>
+    <div id='sidebar'>
+
+        <% include userInfo %>
+
+        <div class='panel'>
+            <div class='inner ads'>
+
+
+                <a href="https://alinode.aliyun.com/?ref=cnode" target="_blank" class="banner sponsor_outlink"
+                   data-label="alinode">
+                    <img src="//dn-cnode.qbox.me/Fn4D6BhOTz1IswvmzeZ1q7QW1ls_">
+                </a>
+
+
+                <div class="sep10"></div>
+
+                <a href="http://www.ucloud.cn/site/active/gift.html?utm_source=cnodejs&utm_medium=content_pic_pc&utm_campaign=multicloud&utm_content=gift&ytag=cnodejs"
+                   target="_blank" class="banner sponsor_outlink"
+                   data-label="ucloud-banner">
+                    <img src="//dn-cnode.qbox.me/FgQS-GQDfqwAD_v0NuhyYUOUk5MG">
+                </a>
+
+            </div>
+        </div>
+
+
+        <div class='panel'>
+            <div class='header'>
+                <span class='col_fade'>友情社区</span>
+            </div>
+            <div class='inner'>
+                <ol class="friendship-community">
+                    <li>
+                        <a href="https://ruby-china.org/" target="_blank">
+                            <img src="//o4j806krb.qnssl.com/public/images/ruby-china-20150529.png">
+                        </a>
+                    </li>
+                    <div class="sep10"></div>
+                    <li>
+                        <a href="http://golangtc.com/" target="_blank">
+                            <img src="//o4j806krb.qnssl.com/public/images/golangtc-logo.png">
+                        </a>
+                    </li>
+                    <div class="sep10"></div>
+                    <li>
+                        <a href="http://phphub.org/" target="_blank">
+                            <img src="//o4j806krb.qnssl.com/public/images/phphub-logo.png">
+                        </a>
+                    </li>
+                    <div class="sep10"></div>
+                    <li>
+                        <a href="https://testerhome.com/" target="_blank">
+                            <img src="//dn-cnode.qbox.me/FjLUc7IJ2--DqS706etPQ1EGajxK">
+                        </a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div class='panel'>
+            <div class='header'>
+                <span class='col_fade'>客户端二维码</span>
+            </div>
+            <div class='inner cnode-app-download'>
+                <img width='200' src="//dn-cnode.qbox.me/FtG0YVgQ6iginiLpf9W4_ShjiLfU">
+                <br/>
+                <a href="https://github.com/soliury/noder-react-native" target="_blank">客户端源码地址</a>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id='content'>
+        <div class='panel'>
+            <div class='header'>
+                <ul class='breadcrumb'>
+                    <li><a href='/'>主页</a><span class='divider'>/</span></li>
+                    <li class='active'>通知</li>
+                </ul>
+            </div>
+            <div class='inner'>
+
+                <div class="alert alert-error">
+                    <strong><%= errMsg %></strong>
+                </div>
+
+
+                <a href="/"><span class="span-common">返回</span></a>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<% include layouts/footer %>

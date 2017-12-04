@@ -9,6 +9,7 @@ const flash = require('connect-flash')
 
 var index = require('./routes/index');
 var user = require('./routes/user');
+var topic = require('./routes/topic');
 
 var app = express();
 
@@ -59,6 +60,7 @@ app.use((req, res, next) => {
 
 app.use('/', index);
 app.use('/user', user);
+app.use('/topic', topic);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
