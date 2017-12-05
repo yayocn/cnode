@@ -96,9 +96,15 @@
                 <span class='col_fade'>作者其它话题</span>
             </div>
             <div class='inner'>
+                <ul class='unstyled'>
+                    <% otherData.forEach(function(item){ %>
+                    <li>
+                        <div><a class='dark topic_title' href="/topic/<%= item._id %>" title="<%= item.title %>"><%= item.title %></a>
+                        </div>
+                    </li>
+                    <%}) %>
 
-
-
+                </ul>
             </div>
         </div>
 
@@ -107,7 +113,6 @@
                 <span class='col_fade'>无人回复的话题</span>
             </div>
             <div class='inner'>
-
 
 
             </div>
@@ -121,9 +126,8 @@
       	<%= topicData.title %>
       </span>
                 <div class="changes">
-
-                    <span>
-          发布于 <%= topicData.createTime %>
+        <span>
+          发布于 <%= setTimeAgo(topicData.createTime) %>
         </span>
                     <span>
           作者 <a href="/user/xdlnode"><%= topicData.user.username %></a>
@@ -139,6 +143,7 @@
                     <!--
                       如果用户是存在：取消收藏或者是收藏
                     -->
+
 
                 </div>
 

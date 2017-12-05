@@ -11,6 +11,8 @@ var index = require('./routes/index');
 var user = require('./routes/user');
 var topic = require('./routes/topic');
 
+const setTimeAgo = require('./config/setTimeAgo_config');
+
 var app = express();
 
 // view engine setup
@@ -54,6 +56,10 @@ app.use((req, res, next) => {
 
   // 密码修改成功
   res.locals.setPwdOk = req.flash('setPwdOk');
+
+  // 设置时间格式化函数
+  res.locals.setTimeAgo = setTimeAgo;
+
   // 移交权限
   next();
 })

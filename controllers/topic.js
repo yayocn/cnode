@@ -2,6 +2,8 @@ const cateModel = require('../models/cateModel');
 const topicModel = require('../models/topicModel');
 const userModel = require('../models/userModel');
 
+const setTimeAgo = require('../config/setTimeAgo_config');
+
 const topic = {
   index (req, res) {
     res.send('话题');
@@ -73,24 +75,42 @@ const topic = {
      几年前(大于1年)
 
      3. 作者的其他话题如何来获取!
-
      4. 无人回复的话题，是如何考虑的！
-
      */
 
-    // 查询话题详情
-    topicModel.findOne(con)
+    // 访问量 +1
+    topicModel.update(con, { $inc: { viewNum: 1 }}, (err, msg) => {
+      // 查询话题详情
+      topicModel.findOne(con)
       // 关联查询
-      .populate('cate', { catename: 1 })
-      .populate('user',{ userpic: 1, username: 1 })
-      .exec((err, data) => {
-        // 响应模板，分配数据
-        if (data) {
-          res.render('topicShow', { topicData: data })
-        } else {
-          res.render('tip', { errMsg: '此话题不存在'})
-        }
-      })
+        .populate('cate', { catename: 1 })
+        .populate('user',{ userpic: 1, username: 1 })
+        .exec((err, data) => {
+          // 响应模板，分配数据
+          if (data) {
+            // 当前用户的其他话题
+            const conOther = {
+              // 话题发布者
+              user: data.user._id,
+              // 不是当前话题
+              _id: { $ne: req.params._id }
+            }
+
+            topicModel.find(conOther, { title: 1 }, {
+              sort: { createTime: -1 },
+              limit: 5
+            }, (err, otherData) => {
+              // 单个的话，可以把setTimeAgo函数这样传过去，但是对于列表就不合适了
+              // res.render('topicShow', { topicData: data, setTimeAgo: setTimeAgo })
+
+              res.render('topicShow', { topicData: data, otherData: otherData });
+            })
+          } else {
+            res.render('tip', { errMsg: '此话题不存在'})
+          }
+        })
+    })
+
   }
 }
 
