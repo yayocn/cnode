@@ -2,10 +2,50 @@
 const userModel = require('../models/userModel');
 const cryptoStr = require('../config/crypto_config');
 const sendMail = require('../config/email_config');
+const ep = new require('eventproxy')();
+const cateModel = require('../models/cateModel');
+const topicModel = require('../models/topicModel');
 
 const index = {
   index (req, res) {
-    res.render('index');
+    /**
+     * 1. 分配话题类型数据
+     * 2. 分配话题列表数据（分页）
+     * 3. 无人回复话题
+     * 4. 积分榜前10
+     * 5. 友情社区（必须是管理员在后台添加）
+     */
+
+    // 监控
+    ep.all('cateData', 'topicData', 'zeroReplyData', 'scoreboard', (cateData, topicData, zeroReplyData, scoreboard) => {
+      if (topicData) {
+        res.render('index', { cateData, topicData });
+      }
+    });
+
+    // 话题类型
+    cateModel.find({}, {}, {
+      sort: { ordernum: 1 }
+    }, (err, data) => {
+      ep.emit('cateData', data);
+    });
+
+    // 话题列表
+    topicModel.find({}, {}, {
+      sort: {
+        // 先显示置顶
+        top: -1,
+        createTime: -1
+      }
+    })
+      .populate('user', { userpic: 1 })
+      .populate('cate', { catename: 1 })
+      .exec((err, data) => {
+        ep.emit('topicData', data);
+      })
+
+    ep.emit('zeroReplyData', null);
+    ep.emit('scoreboard', null);
   },
   reg (req, res) {
     res.render('reg')
