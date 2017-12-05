@@ -3,6 +3,7 @@ const topicModel = require('../models/topicModel');
 const userModel = require('../models/userModel');
 
 const setTimeAgo = require('../config/setTimeAgo_config');
+const ep = require('eventproxy')();
 
 const topic = {
   index (req, res) {
@@ -78,13 +79,29 @@ const topic = {
      4. 无人回复的话题，是如何考虑的！
      */
 
+
+    /*
+     最终的目的：
+     1. 响应当前话题相关数据
+     2. 响应无人回复的话题
+     3. 响应作者的其他话题
+     */
+    // 监听事件
+    ep.all('topicData', 'zeroReply', (data, zeroReplyData) => {
+      if (!data.topicData) {
+        res.render('tip', { errMsg: '此话题不存在或者已被删除！'})
+      } else {
+        res.render('topicShow', { topicData: data.topicData, otherData: data.otherData, zeroReplyData: zeroReplyData });
+      }
+    });
+
     // 访问量 +1
     topicModel.update(con, { $inc: { viewNum: 1 }}, (err, msg) => {
       // 查询话题详情
       topicModel.findOne(con)
       // 关联查询
         .populate('cate', { catename: 1 })
-        .populate('user',{ userpic: 1, username: 1 })
+        .populate('user',{ userpic: 1, username: 1, score: 1, mark: 1 })
         .exec((err, data) => {
           // 响应模板，分配数据
           if (data) {
@@ -103,14 +120,25 @@ const topic = {
               // 单个的话，可以把setTimeAgo函数这样传过去，但是对于列表就不合适了
               // res.render('topicShow', { topicData: data, setTimeAgo: setTimeAgo })
 
-              res.render('topicShow', { topicData: data, otherData: otherData });
+              ep.emit('topicData', { topicData: data, otherData: otherData })
             })
           } else {
-            res.render('tip', { errMsg: '此话题不存在'})
+            ep.emit('topicData',{ topicData: null });
           }
         })
     })
 
+    // 查询无人回复的话题
+    const conNoRelpy = {
+      reply: { $size: 0 }
+    }
+
+    topicModel.find(conNoRelpy, { title: 1 }, {
+      sort: { createTime: -1 },
+      limit: 5
+    }, (err, data) => {
+      ep.emit('zeroReply', data);
+    })
   }
 }
 

@@ -28,12 +28,7 @@
                         </div>
                         <div class="space clearfix"></div>
                         <span class="signature">
-        “
-
-                            <%= topicData.user.mark %>
-
-                            ”
-    </span>
+                            “<%= user.mark?user.mark:'这个家伙很懒，什么都没有留下！' %>”</span>
                     </div>
                 </div>
 
@@ -113,8 +108,14 @@
                 <span class='col_fade'>无人回复的话题</span>
             </div>
             <div class='inner'>
-
-
+                <ul class='unstyled'>
+                    <% zeroReplyData.forEach(function(item){ %>
+                    <li>
+                        <div><a class='dark topic_title' href="/topic/<%= item._id %>" title="<%= item.title %>"><%= item.title %></a>
+                        </div>
+                    </li>
+                    <%}) %>
+                </ul>
             </div>
         </div>
     </div>
