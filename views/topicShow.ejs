@@ -22,13 +22,13 @@
                         <span class='user_name'><a class='dark' href="/user/xdlnode"><%= topicData.user.username %></a></span>
 
                         <div class='board clearfix'>
-                            <div class='floor'>
+                            <div class='lou'>
                                 <span class='big'>积分: <%= topicData.user.score %> </span>
                             </div>
                         </div>
                         <div class="space clearfix"></div>
                         <span class="signature">
-                            “<%= user.mark?user.mark:'这个家伙很懒，什么都没有留下！' %>”</span>
+                            “<%= topicData.user.mark?topicData.user.mark:'这个家伙很懒，什么都没有留下！' %>”</span>
                     </div>
                 </div>
 

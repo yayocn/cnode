@@ -10,10 +10,13 @@ router.get('/create', checkUserLogin, topic.create);
 router.post('/create', checkUserLogin, topic.doCreate);
 
 // 话题图片上传
-// router.get('/uploadImg', (req, res) => {
-//   res.send('ok');
-// })
+router.get('/uploadImg', (req, res) => {
+  res.send('ok');
+})
 
-router.get('/:_id', checkUserLogin, topic.show);
+// 回复
+router.post('/reply/:_id', checkUserLogin, topic.reply);
+
+router.get('/:_id', topic.show);
 
 module.exports = router;

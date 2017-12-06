@@ -1,6 +1,7 @@
 const cateModel = require('../models/cateModel');
 const topicModel = require('../models/topicModel');
 const userModel = require('../models/userModel');
+const replyModel = require('../models/replyModel');
 
 const setTimeAgo = require('../config/setTimeAgo_config');
 const ep = require('eventproxy')();
@@ -87,11 +88,11 @@ const topic = {
      3. 响应作者的其他话题
      */
     // 监听事件
-    ep.all('topicData', 'zeroReply', (data, zeroReplyData) => {
+    ep.all('topicData', 'zeroReply', 'replyData', (data, zeroReplyData, replyData) => {
       if (!data.topicData) {
         res.render('tip', { errMsg: '此话题不存在或者已被删除！'})
       } else {
-        res.render('topicShow', { topicData: data.topicData, otherData: data.otherData, zeroReplyData: zeroReplyData });
+        res.render('topicShow', { topicData: data.topicData, otherData: data.otherData, zeroReplyData: zeroReplyData, replyData });
       }
     });
 
@@ -105,6 +106,11 @@ const topic = {
         .exec((err, data) => {
           // 响应模板，分配数据
           if (data) {
+            // 查询当前话题的所有回复
+            replyModel.find({ topic: req.params._id }).populate('user', { username: 1, userpic: 1 }).exec((err, data) => {
+              ep.emit('replyData', data);
+            })
+
             // 当前用户的其他话题
             const conOther = {
               // 话题发布者
@@ -139,7 +145,30 @@ const topic = {
     }, (err, data) => {
       ep.emit('zeroReply', data);
     })
-  }
+  },
+  reply (req, res) {
+    const con = {
+      _id: req.params._id
+    };
+
+    topicModel.findOne(con, { reply: 1 }, (err, data) => {
+      const replyData = {
+        content: req.body.content,
+        user: req.session.user._id,
+        topic: req.params._id,
+        lou: data.reply.length + 1,
+      };
+
+      replyModel.create(replyData, (err, msg) => {
+        // msg 返回来当前产生数据的_id
+        topicModel.update(con, { $push: { reply: msg._id }}, (err) => {
+          if (!err) {
+            res.redirect('back');
+          }
+        })
+      })
+    })
+  },
 }
 
 module.exports = topic;
