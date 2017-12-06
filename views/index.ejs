@@ -180,7 +180,44 @@
                 </div>
 
                 <!-- 不仅仅要传递分类，还要传递的分页数据 -->
+                <div class='pagination' current_page='<%= page %>'>
+                    <ul>
+                        <!-- 是否是第一页 -->
+                        <% if(page==1){%>
+                        <li class='disabled'><a>«</a></li>
+                        <%}else{%>
+                        <li><a href='/?page=1&tab=<%= tab %>'>«</a></li>
+                        <%} %>
 
+                        <!-- 最小值 -->
+                        <% if(page-2>1){%>
+                        <li><a>...</a></li>
+                        <%} %>
+
+
+                        <!-- 遍历 -->
+                        <%
+                        for(var i=page-2;i<=parseInt(page)+2;i++){
+                            // 判断是否是已经到0了
+                            if(i<=0 || i>pageMax){
+                                continue;
+                            }
+                        %>
+                        <li><a href='/?page=<%= i %>&tab=<%= tab %>'><%= i %></a></li>
+                        <%} %>
+
+                        <% if(parseInt(page)+2<pageMax){%>
+                        <li><a>...</a></li>
+                        <%} %>
+
+
+                        <% if(page==pageMax){%>
+                        <li class='disabled'><a>»</a></li>
+                        <%}else{%>
+                        <li><a href='/?page=<%= pageMax %>&tab=<%= tab %>'>»</a></li>
+                        <%} %>
+                    </ul>
+                </div>
                 <script>
                   $(document).ready(function () {
                     var $nav = $('.pagination');

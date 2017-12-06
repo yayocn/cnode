@@ -18,7 +18,7 @@ const index = {
 
     // 监控
     ep.all('cateData', 'topic', 'zeroReplyData', 'scoreboard', (cateData, topic, zeroReplyData, scoreboard) => {
-      res.render('index', { cateData, topicData: topic.topicData, tab: topic.tab, zeroReplyData, scoreboard });
+      res.render('index', { cateData, topicData: topic.topicData, tab: topic.tab, page: topic.page, pageMax: topic.pageMax, zeroReplyData, scoreboard });
     });
 
     // 话题类型
@@ -40,19 +40,44 @@ const index = {
       con.cate = req.query.tab
     }
 
-    // 话题列表
-    topicModel.find(con, {}, {
-      sort: {
-        // 先显示置顶
-        top: -1,
-        createTime: -1
+    let pageSize = 5;
+    let page = req.query.page ? req.query.page : 1;
+
+    // 符合条件的结果总数
+    topicModel.find(con, {}).populate('user', { userpic: 1 }).populate('cate', { catename: 1 }).count((err, totalNum) => {
+      if (totalNum <= 0) {
+        ep.emit('topic', { topicData: [], tab: req.query.tab, page: 0, pageMax: 0 });
+        return ;
       }
-    })
-      .populate('user', { userpic: 1, username: 1 })
-      .populate('cate', { catename: 1 })
-      .exec((err, data) => {
-        ep.emit('topic', { topicData: data, tab: req.query.tab });
+
+      if (page <= 0) {
+        page = 1;
+      }
+
+      const pageMax = Math.ceil(totalNum / pageSize);
+      if (page > pageMax) {
+        page = pageMax;
+      }
+
+      const pageOffset = pageSize * (page - 1);
+
+      // 话题列表  -- 用到分页
+      topicModel.find(con, {}, {
+        sort: {
+          // 先显示置顶
+          top: -1,
+          createTime: -1,
+        },
+        skip: pageOffset,
+        limit: pageSize
       })
+        .populate('user', { userpic: 1, username: 1 })
+        .populate('cate', { catename: 1 })
+        .exec((err, data) => {
+          ep.emit('topic', { topicData: data, tab: req.query.tab, page: page, pageMax: pageMax });
+        })
+
+    })
 
     // 查询0回复的话题
     topicModel.find({ reply: { $size: 0 }}, { title: 1 }, {
