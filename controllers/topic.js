@@ -169,6 +169,49 @@ const topic = {
       })
     })
   },
+  collect (req, res) {
+    if (!req.session.user) {
+      res.send('nologin');
+      return;
+    }
+    
+    // 当前用户
+    const con = {
+      _id: req.session.user._id
+    };
+
+    if (req.session.user.collect.indexOf(req.params._id) < 0) {
+      const newData = {
+        $push: {
+          collect: req.params._id
+        }
+      };
+
+      userModel.update(con, newData, (err) => {
+        if (err) {
+          res.send('error');
+        } else {
+          req.session.user.collect.push(req.params._id);
+          res.send('collectok');
+        }
+      })
+    } else {
+      const newData = {
+        $pull: {
+          collect: req.params._id
+        }
+      };
+
+      userModel.update(con, newData, (err) => {
+        if (err) {
+          res.send('error');
+        } else {
+          req.session.user.collect.splice(req.session.user.collect.indexOf(req.params._id), 1);
+          res.send('cancelok');
+        }
+      })
+    }
+  }
 }
 
 module.exports = topic;

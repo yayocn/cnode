@@ -17,6 +17,9 @@ router.get('/uploadImg', (req, res) => {
 // 回复
 router.post('/reply/:_id', checkUserLogin, topic.reply);
 
+// 收藏话题的路由
+router.get('/collect/:_id', topic.collect);
+
 router.get('/:_id', topic.show);
 
 module.exports = router;

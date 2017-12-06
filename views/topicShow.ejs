@@ -142,8 +142,16 @@
 
 
                     <!--
-                      如果用户是存在：取消收藏或者是收藏
-                    -->
+                        如果用户是存在：取消收藏或者是收藏
+                      -->
+                    <% if(user){%>
+                    <% if(user.collect.indexOf(topicData._id.toString())!=-1){
+                    %>
+                    <input id="collect" tid="<%= topicData._id %>" class="span-common pull-right collect_btn" type="submit" value="取消收藏" action="collect">
+                    <% }else{%>
+                    <input id="collect" tid="<%= topicData._id %>" class="span-common span-success pull-right collect_btn" type="submit" value="收藏" action="collect">
+                    <%} %>
+                    <%} %>
 
 
                 </div>

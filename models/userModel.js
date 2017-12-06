@@ -37,7 +37,12 @@ const userSchema = mongoose.Schema({
   score: {
     type: Number,
     default: 0
-  }
+  },
+  // 包含了该用户所有的收藏的
+  collect:[{
+    type : 'ObjectId',
+    ref : 'cnode_topic'
+  }],
 });
 
 const userModel = mongoose.model('cnode_user', userSchema);
