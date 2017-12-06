@@ -121,8 +121,11 @@
                     _id   分类的_id
 
                 -->
-
-
+                <a href="/?tab=all" class="topic-tab <%= tab == 'all' ? 'current-tab' : '' %>">全部</a>
+                <a href="/?tab=good" class="topic-tab <%= tab == 'good' ? 'current-tab' : '' %>">精华</a>
+                <% cateData.forEach(function (item) { %>
+                <a href="/?tab=<%= item._id %>" class="topic-tab <%= tab == item._id ? 'current-tab' : '' %>"><%= item.catename %></a>
+                <% }) %>
             </div>
 
             <div class="inner no-padding">
@@ -130,9 +133,9 @@
 
                     <% topicData.forEach(function(item){ %>
                     <div class='cell'>
-                        <a class="user_avatar pull-left" href="/user/lellansin">
+                        <a class="user_avatar pull-left" href="/user/<%= item.user.username %>">
                             <img src="/<%= item.user.userpic %>"
-                                 title="lellansin"
+                                 title="<%= item.user.username %>"
                             />
                         </a>
                         <span class="reply_count pull-left">

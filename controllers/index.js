@@ -17,10 +17,8 @@ const index = {
      */
 
     // 监控
-    ep.all('cateData', 'topicData', 'zeroReplyData', 'scoreboard', (cateData, topicData, zeroReplyData, scoreboard) => {
-      if (topicData) {
-        res.render('index', { cateData, topicData, zeroReplyData, scoreboard });
-      }
+    ep.all('cateData', 'topic', 'zeroReplyData', 'scoreboard', (cateData, topic, zeroReplyData, scoreboard) => {
+      res.render('index', { cateData, topicData: topic.topicData, tab: topic.tab, zeroReplyData, scoreboard });
     });
 
     // 话题类型
@@ -30,18 +28,30 @@ const index = {
       ep.emit('cateData', data);
     });
 
+    const con = {};
+    if(req.query.tab==undefined || req.query.tab=='all'){
+      // 现在请求所有的数据
+      req.query.tab = 'all';
+    }else if(req.query.tab=='good'){
+      // 查询good为真的
+      con.good = true;
+    }else{
+      // 分类是相同的
+      con.cate = req.query.tab
+    }
+
     // 话题列表
-    topicModel.find({}, {}, {
+    topicModel.find(con, {}, {
       sort: {
         // 先显示置顶
         top: -1,
         createTime: -1
       }
     })
-      .populate('user', { userpic: 1 })
+      .populate('user', { userpic: 1, username: 1 })
       .populate('cate', { catename: 1 })
       .exec((err, data) => {
-        ep.emit('topicData', data);
+        ep.emit('topic', { topicData: data, tab: req.query.tab });
       })
 
     // 查询0回复的话题
