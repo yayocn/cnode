@@ -34,7 +34,14 @@
                 <span class='col_fade'>无人回复的话题</span>
             </div>
             <div class='inner'>
-
+                <ul class="unstyled">
+                    <% zeroReplyData.forEach(function(item){ %>
+                    <li>
+                        <div><a class='dark topic_title' href="/topic/<%= item._id %>" title="<%= item.title %>"><%= item.title %></a>
+                        </div>
+                    </li>
+                    <%}) %>
+                </ul>
             </div>
         </div>
 
@@ -46,7 +53,14 @@
                 <a class='dark' href='/users/top100'>TOP 100 &gt;&gt;</a>
             </div>
             <div class='inner'>
-
+                <ol>
+                    <% scoreboard.forEach(function(item){ %>
+                        <li>
+                            <span class="top_score"><%= item.score %></span>
+                            <span class="user_name"><a href="/user/<%= item.username %>"><%= item.username %></a></span>
+                        </li>
+                    <% }) %>
+                </ol>
             </div>
         </div>
 

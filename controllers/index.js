@@ -19,7 +19,7 @@ const index = {
     // 监控
     ep.all('cateData', 'topicData', 'zeroReplyData', 'scoreboard', (cateData, topicData, zeroReplyData, scoreboard) => {
       if (topicData) {
-        res.render('index', { cateData, topicData });
+        res.render('index', { cateData, topicData, zeroReplyData, scoreboard });
       }
     });
 
@@ -44,8 +44,21 @@ const index = {
         ep.emit('topicData', data);
       })
 
-    ep.emit('zeroReplyData', null);
-    ep.emit('scoreboard', null);
+    // 查询0回复的话题
+    topicModel.find({ reply: { $size: 0 }}, { title: 1 }, {
+      sort: { createTime: -1 },
+      limit: 5
+    }, (err, data) => {
+      ep.emit('zeroReplyData', data);
+    });
+
+    // 查询积分榜
+    userModel.find({}, { username: 1, score: 1 }, {
+      sort: { score: -1 },
+      limit: 10
+    }, (err, data) => {
+      ep.emit('scoreboard', data);
+    })
   },
   reg (req, res) {
     res.render('reg')
