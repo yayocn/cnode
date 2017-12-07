@@ -25,4 +25,6 @@ router.get('/collect/:_id', topic.collect);
 
 router.get('/:_id', topic.show);
 
+router.get('/delete/:_id', topic.delete);
+
 module.exports = router;

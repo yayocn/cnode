@@ -257,6 +257,43 @@ const topic = {
         })
       }
     })
+  },
+  delete (req, res) {
+    if (!req.session.user) {
+      res.send('nologin');
+      return;
+    }
+
+    // 管理员
+    if (req.session.user.level === 1) {
+      const con = {
+        _id: req.params._id
+      };
+
+      topicModel.remove(con, (err, msg) => {
+        if (!err) {
+          res.send('removeok');
+        }
+      })
+    } else {
+      const con = {
+        _id: req.params._id,
+        user: req.session.user._id
+      };
+
+      topicModel.findOne(con, (err, data) => {
+        if (data) {
+          topicModel.remove(con, (err, msg) => {
+            if (!err) {
+              res.send('removeok');
+            }
+          })
+        } else {
+          res.send('nolevel');
+        }
+      })
+
+    }
   }
 }
 
