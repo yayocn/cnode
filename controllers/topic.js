@@ -107,7 +107,8 @@ const topic = {
           // 响应模板，分配数据
           if (data) {
             // 查询当前话题的所有回复
-            replyModel.find({ topic: req.params._id }).populate('user', { username: 1, userpic: 1 }).exec((err, data) => {
+            replyModel.find({ topic: req.params._id }).populate('user', { username: 1, userpic: 1, zan: 1 }).exec((err, data) => {
+              console.log(data)
               ep.emit('replyData', data);
             })
 
@@ -211,6 +212,51 @@ const topic = {
         }
       })
     }
+  },
+  zan (req, res) {
+    if (!req.session.user) {
+      res.send('nologin');
+      return;
+    }
+
+    const con = {
+      _id: req.query._id,
+      zan: req.session.user._id
+    };
+
+    replyModel.findOne(con, (err, data) => {
+      if (data) {
+        // 已经点赞了, 需要取消
+        const con = {
+          _id: req.query._id
+        };
+        const newData = {
+          $pull: {
+            zan: req.session.user._id
+          }
+        };
+        replyModel.update(con, newData, (err, msg) => {
+          if (!err) {
+            res.send('cancel');
+          }
+        })
+      } else {
+        // 没有点赞, 添加
+        const con = {
+          _id: req.query._id
+        };
+        const newData = {
+          $push: {
+            zan: req.session.user._id
+          }
+        };
+        replyModel.update(con, newData, (err, msg) => {
+          if (!err) {
+            res.send('ok');
+          }
+        })
+      }
+    })
   }
 }
 
