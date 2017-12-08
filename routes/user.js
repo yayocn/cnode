@@ -14,4 +14,7 @@ router.post('/setPwd', checkUserLogin, user.setPwd);
 
 router.post('/setUserpic', checkUserLogin, user.setUserpic);
 
+// 用户个人主页相关
+router.get('/:username', user.showInfo)
+
 module.exports = router;

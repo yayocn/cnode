@@ -1,0 +1,231 @@
+<% include layouts/header.ejs %>
+
+<div id="main">
+    <div id="sidebar">
+
+        <div class="panel">
+
+            <div class="header">
+                <span class="col_fade">个人信息</span>
+            </div>
+            <div class="inner">
+                <div class="user_card">
+                    <div>
+                        <a class="user_avatar" href="/user/<%= userData.username %>">
+                            <img src="/<%= userData.userpic %>"
+                                 title="<%= userData.username %>">
+                        </a>
+                        <span class="user_name"><a class="dark" href="/user/<%= userData.username %>"><%= userData.username %></a></span>
+
+                        <div class="board clearfix">
+                            <div class="floor">
+                                <span class="big">积分: <%= userData.score %> </span>
+                            </div>
+                        </div>
+                        <div class="space clearfix"></div>
+                        <span class="signature">“<%= userData.mark ? userData.mark : '这个家伙很懒，什么都没有留下！' %>”</span>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+            <div class="inner ads">
+
+
+                <a href="http://www.ucloud.cn/site/active/gift.html?utm_source=cnodejs&amp;utm_medium=content_pic_pc&amp;utm_campaign=multicloud&amp;utm_content=gift&amp;ytag=cnodejs"
+                   target="_blank" class="banner sponsor_outlink" data-label="ucloud-banner">
+                    <img src="//dn-cnode.qbox.me/FgQS-GQDfqwAD_v0NuhyYUOUk5MG">
+                </a>
+
+
+                <div class="sep10"></div>
+
+                <a href="https://alinode.aliyun.com/?ref=cnode" target="_blank" class="banner sponsor_outlink"
+                   data-label="alinode">
+                    <img src="//dn-cnode.qbox.me/Fn4D6BhOTz1IswvmzeZ1q7QW1ls_">
+                </a>
+
+            </div>
+        </div>
+
+
+        <div class="panel">
+            <div class="header">
+                <span class="col_fade">友情社区</span>
+            </div>
+            <div class="inner">
+                <ol class="friendship-community">
+                    <li>
+                        <a href="https://ruby-china.org/" target="_blank">
+                            <img src="//o4j806krb.qnssl.com/public/images/ruby-china-20150529.png">
+                        </a>
+                    </li>
+                    <div class="sep10"></div>
+                    <li>
+                        <a href="http://golangtc.com/" target="_blank">
+                            <img src="//o4j806krb.qnssl.com/public/images/golangtc-logo.png">
+                        </a>
+                    </li>
+                    <div class="sep10"></div>
+                    <li>
+                        <a href="http://phphub.org/" target="_blank">
+                            <img src="//o4j806krb.qnssl.com/public/images/phphub-logo.png">
+                        </a>
+                    </li>
+                    <div class="sep10"></div>
+                    <li>
+                        <a href="https://testerhome.com/" target="_blank">
+                            <img src="//dn-cnode.qbox.me/FjLUc7IJ2--DqS706etPQ1EGajxK">
+                        </a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="header">
+                <span class="col_fade">客户端二维码</span>
+            </div>
+            <div class="inner cnode-app-download">
+                <img width="200" src="//dn-cnode.qbox.me/FtG0YVgQ6iginiLpf9W4_ShjiLfU">
+                <br>
+                <a href="https://github.com/soliury/noder-react-native" target="_blank">客户端源码地址</a>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="content">
+        <div class="panel">
+            <div class="header">
+                <ul class="breadcrumb">
+                    <li><a href="/">主页</a><span class="divider">/</span></li>
+                </ul>
+            </div>
+            <div class="inner userinfo">
+                <div class="user_big_avatar">
+                    <img src="/<%= userData.userpic %>" class="user_avatar"
+                         title="<%= userData.username %>">
+                </div>
+                <a class="dark"><%= userData.username %></a>
+
+                <div class="user_profile">
+                    <ul class="unstyled">
+                        <span class="big"><%= userData.score %></span> 积分
+
+                        <li>
+                            <a class="dark" href="/user/yefeng2016/collections" target="_blank">
+                                <span class="big collect-topic-count"><%= userData.collect.length %></span>个话题收藏
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <p class="col_fade">注册时间 <%= setTimeAgo(userData.regTime) %></p>
+
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="header">
+                <span class="col_fade">最近创建的话题</span>
+            </div>
+
+            <% if (lastCreateTopic.length > 0) { %>
+                <% lastCreateTopic.forEach((topic) => { %>
+                <div class="cell">
+
+                    <a class="user_avatar pull-left" href="/user/<%= userData.username %>">
+                        <img src="/<%= userData.userpic %>" title="<%= userData.username %>">
+                    </a>
+
+                    <span class="reply_count pull-left">
+                        <span class="count_of_replies" title="回复数">
+                          <%= topic.reply.length %>
+                        </span>
+                        <span class="count_seperator">/</span>
+                        <span class="count_of_visits" title="点击数">
+                          <%= topic.viewNum %>
+                        </span>
+                      </span>
+
+
+                    <a class="last_time pull-right" href="/topic/5a28e1648230827a1829352d#5a28eae3d92f2f5b185acca8">
+                        <img class="user_small_avatar"
+                             src="https://avatars3.githubusercontent.com/u/22342518?v=4&amp;s=120">
+                        <span class="last_active_time"><%= setTimeAgo(topic.createTime) %></span>
+                    </a>
+
+
+                    <div class="topic_title_wrapper">
+
+                        <a class="topic_title" href="/topic/<%= topic._id %>" title="<%= topic.title %>">
+                            <%= topic.title %>
+                        </a>
+                    </div>
+                </div>
+                <% }) %>
+
+                <div class="cell more">
+                    <a class="dark" href="/user/<%= userData.username %>/topics">查看更多»</a>
+                </div>
+            <% } %>
+
+        </div>
+
+        <div class="panel">
+            <div class="header">
+                <span class="col_fade">最近参与的话题</span>
+            </div>
+
+            <% if (lastReplyTopic.length) { %>
+                <% lastReplyTopic.forEach((topic) => { %>
+                <div class="cell">
+
+                    <a class="user_avatar pull-left" href="/user/<%= topic.user._id %>">
+                        <img src="/<%= topic.user.userpic %>">
+                    </a>
+
+                    <span class="reply_count pull-left">
+                    <span class="count_of_replies" title="回复数">
+                      <%= topic.reply.length %>
+                    </span>
+                    <span class="count_seperator">/</span>
+                    <span class="count_of_visits" title="点击数">
+                      <%= topic.viewNum %>
+                    </span>
+                  </span>
+
+
+                    <a class="last_time pull-right" href="/topic/5a28e1648230827a1829352d#5a28eae3d92f2f5b185acca8">
+                        <img class="user_small_avatar"
+                             src="https://avatars3.githubusercontent.com/u/22342518?v=4&amp;s=120">
+                        <span class="last_active_time"><%= setTimeAgo(topic.createTime) %></span>
+                    </a>
+
+
+                    <div class="topic_title_wrapper">
+
+
+                        <a class="topic_title" href="/topic/<%= topic.user._id %>" title="<%= topic.title %>">
+                            <%= topic.title %>
+                        </a>
+                    </div>
+                </div>
+                <% }) %>
+
+                <div class="cell more">
+                    <a class="dark" href="/user/yefeng2016/replies">查看更多»</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+
+</div>
+
+<% include layouts/footer.ejs %>

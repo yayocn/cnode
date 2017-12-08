@@ -1,7 +1,10 @@
 const userModel = require('../models/userModel');
+const topicModel = require('../models/topicModel');
+const replyModel = require('../models/replyModel');
 const cryptoStr = require('../config/crypto_config');
 const uploadFile = require('../config/uploadFile_config');
 const gm = require('gm');
+const ep = require('eventproxy')();
 
 const user = {
   index (req, res, next) {
@@ -116,6 +119,65 @@ const user = {
       });
     });
   },
+  // 用户主页
+  showInfo (req, res) {
+    const con = {
+      username: req.params.username
+    }
+
+    ep.all('lastCreateTopic', 'lastReplyTopic', 'userData', (lastCreateTopic, lastReplyTopic, userData ) => {
+      res.render('showUserInfo', { lastCreateTopic, lastReplyTopic, userData });
+    });
+
+    userModel.findOne(con, { userpic: 1, username: 1, score: 1, collect: 1, regTime: 1 }, (err, userData) => {
+      if (userData) {
+        ep.emit('userData', userData);
+        // 最近发布的话题
+        topicModel.find({ user: userData._id }, { reply: 1, viewNum: 1, title: 1, top: 1, good: 1, createTime: 1 }, {
+          sort: { createTime: -1 },
+          limit: 5
+        }, (err, topicData) => {
+          if (topicData) {
+            ep.emit('lastCreateTopic', topicData);
+          } else {
+            ep.emit('lastCreateTopic', []);
+          }
+        })
+
+        // 最近参与的话题
+        replyModel.find({ user: userData._id }, { topic: 1 }, {
+          sort: { replyTime: -1 },
+          limit: 5
+        }, (err, topicIds) => {
+          if (topicIds) {
+            if (topicIds) {
+              // 参与了回复
+
+              let ids = [];
+              topicIds.forEach((item) => {
+                ids.push(item.topic);
+              })
+              // 查询topic
+              const con = {
+                _id: { $in: ids}
+              };
+
+              topicModel.find(con)
+                .populate('user', { userpic: 1 })
+                .exec((err, huati) => {
+                  ep.emit('lastReplyTopic', huati);
+                })
+            } else {
+              // 没有参与回复
+              ep.emit('lastReplyTopic', []);
+            }
+          }
+        })
+      } else {
+        res.render('tip', { errMsg: '用户不存在！'});
+      }
+    })
+  }
 }
 
 module.exports = user;

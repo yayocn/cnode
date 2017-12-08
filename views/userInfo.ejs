@@ -9,10 +9,10 @@
     <div class='inner'>
         <div class='user_card'>
             <div>
-                <a class='user_avatar' href="/user/xdlnode">
-                    <img src="/<%= user.userpic %>" title="xdlnode"/>
+                <a class='user_avatar' href="/user/<%= user.username %>">
+                    <img src="/<%= user.userpic %>" title="<%= user.username %>"/>
                 </a>
-                <span class='user_name'><a class='dark' href="/user/xdlnode"><%= user.username %></a></span>
+                <span class='user_name'><a class='dark' href="/user/<%= user.username %>"><%= user.username %></a></span>
 
                 <div class='board clearfix'>
                     <div class='floor'>
@@ -22,7 +22,7 @@
                 <div class="space clearfix"></div>
                 <span class="signature">
         “
-                    <%= user.mark?user.mark:'这个家伙很懒，什么都没有留下！' %>
+                    <%= user.mark ? user.mark : '这个家伙很懒，什么都没有留下！' %>
 
 
                     ”

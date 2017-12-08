@@ -16,10 +16,10 @@
             <div class='inner'>
                 <div class='user_card'>
                     <div>
-                        <a class='user_avatar' href="/user/xdlnode">
-                            <img src="/<%= topicData.user.userpic %>" title="xdlnode"/>
+                        <a class='user_avatar' href="/user/<%= topicData.user.username %>">
+                            <img src="/<%= topicData.user.userpic %>" title="<%= topicData.user.username %>"/>
                         </a>
-                        <span class='user_name'><a class='dark' href="/user/xdlnode"><%= topicData.user.username %></a></span>
+                        <span class='user_name'><a class='dark' href="/user/<%= topicData.user.username %>"><%= topicData.user.username %></a></span>
 
                         <div class='board clearfix'>
                             <div class='lou'>
@@ -131,7 +131,7 @@
           发布于 <%= setTimeAgo(topicData.createTime) %>
         </span>
                     <span>
-          作者 <a href="/user/xdlnode"><%= topicData.user.username %></a>
+          作者 <a href="/user/<%= topicData.user.username %>"><%= topicData.user.username %></a>
         </span>
                     <span>
           <%= topicData.viewNum %> 次浏览
